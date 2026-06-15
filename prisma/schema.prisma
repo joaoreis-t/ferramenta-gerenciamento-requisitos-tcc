@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  projects Project[]
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  requirements Requirement[]
+}
+
+model Requirement {
+  id          String   @id @default(cuid())
+  requirementCode String
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  type        TipoRequisito
+  priority    PrioridadeRequisito
+  status      StatusRequisito
+
+  //links       String[]
+  // Alterado de `String[]` para `Json?` para funcionar com SQLite
+  // SQLite não suporta arrays de tipos primitivos
+  // Se migrar para PostgreSQL, você pode mudar de volta para `String[]` para usar arrays nativos
+  links       Json?
+
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id])
+
+  versions    VersaoRequisito[]
+
+  originRelations RequirementRelationship[] @relation("OriginRelations")
+  targetRelations RequirementRelationship[] @relation("TargetRelations")
+}
+
+model VersaoRequisito {
+  id            String      @id @default(cuid())
+  createdAt     DateTime    @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  title         String
+  description   String
+  type          TipoRequisito
+  priority      PrioridadeRequisito
+  status        StatusRequisito
+
+  //links         String[]
+  // Alterado de `String[]` para `Json?` para funcionar com SQLite
+  // SQLite não suporta arrays de tipos primitivos
+  // Se migrar para PostgreSQL, você pode mudar de volta para `String[]` para usar arrays nativos
+  //links       Json? Remoção do versionamento dos links
+
+  requirementId String
+  requirement   Requirement @relation(fields: [requirementId], references: [id])
+}
+
+model RequirementRelationship {
+  id                  String      @id @default(cuid())
+  originRequirementId String
+  targetRequirementId String
+  createdAt           DateTime    @default(now())
+
+  originRequirement   Requirement @relation("OriginRelations", fields: [originRequirementId], references: [id])
+  targetRequirement   Requirement @relation("TargetRelations", fields: [targetRequirementId], references: [id])
+
+  @@unique([originRequirementId, targetRequirementId])
+}
+
+enum TipoRequisito {
+  FUNCIONAL
+  NAO_FUNCIONAL
+}
+
+enum PrioridadeRequisito {
+  ESSENCIAL
+  IMPORTANTE
+  DESEJAVEL
+}
+
+enum StatusRequisito {
+  PENDENTE
+  FINALIZADO
+  DESATIVADO
+}
