@@ -121,6 +121,7 @@ export default function Header({
               "
             />
           )}
+          {/*
           <button
             type="button"
             aria-label="Configurações de usuário"
@@ -132,6 +133,7 @@ export default function Header({
             className="w-7 h-7"
             />
           </button>
+          */}
           <button 
             onClick={() => {
               localStorage.removeItem('lastProject');
