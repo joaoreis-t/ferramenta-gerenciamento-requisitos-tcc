@@ -84,7 +84,7 @@ export default function RelationshipModal({
             onChange={(e) =>
               setSelectedRequirementId(e.target.value)
             }
-            className="w-full p-3 rounded-md bg-[#274970] text-white outline-none"
+            className="w-full p-3 rounded-md bg-[#274970] text-white outline-none cursor-pointer"
           >
             <option value="">
               Selecione um requisito
@@ -108,7 +108,7 @@ export default function RelationshipModal({
         <div className="flex justify-end gap-2 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-md bg-gray-500"
+            className="px-4 py-2 rounded-md bg-gray-500 cursor-pointer"
           >
             Cancelar
           </button>
@@ -120,7 +120,7 @@ export default function RelationshipModal({
               !hasAvailableRequirements
             }
             onClick={handleCreateRelationship}
-            className="px-4 py-2 rounded-md bg-[#1a4dd7]"
+            className="px-4 py-2 rounded-md bg-[#1a4dd7] cursor-pointer"
           >
             {loading ? 'Vinculando...' : 'Vincular'}
           </button>

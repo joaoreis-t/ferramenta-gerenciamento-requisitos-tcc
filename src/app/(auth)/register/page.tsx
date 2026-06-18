@@ -38,7 +38,7 @@ export default function RegisterPage() {
           
           {state?.error && <p className="text-red-500">{state.error}</p>}
 
-          <button type="submit" disabled={isPending} className="rounded-md mt-2 p-3 bg-[linear-gradient(135deg,#6989ff_0%,#2151da_100%)] ">
+          <button type="submit" disabled={isPending} className="rounded-md mt-2 p-3 bg-[linear-gradient(135deg,#6989ff_0%,#2151da_100%)] cursor-pointer">
             {isPending ? "Carregando..." : "Cadastrar"}
           </button>
 
